@@ -8,19 +8,16 @@ date_start <- paste0(year_start,'-01-01')
 date_end <- paste0(year_end,'-12-31')
 
 #connecting to historical segments
-res <- dbSendQuery(wrds, paste0("select * from comp_segments_hist_daily.wrds_segmerged
+segment <- tbl(wrds, sql(paste0("select *, extract(year from datadate) AS year from comp_segments_hist_daily.wrds_segmerged
                    where stype = 'BUSSEG'
                    and datadate between '",date_start,"'
-                   and '",date_end,"'"))
-div <- dbFetch(res, n=-1)
-dbClearResult(res)
-
-#converting back to year for later
-div <- div %>% mutate(date_ymd = lubridate::ymd(datadate)) %>% mutate(year = lubridate::year(date_ymd))
+                   and '",date_end,"'")))
 #remove NA sectors
-div <- div %>% filter(!is.na(sics1))
+segment <- segment %>% filter(!is.na(sics1))
 #remove NA sales variable
-div <- div %>% filter(!is.na(sales))
+segment <- segment %>% filter(!is.na(sales))
+#collect information
+div <- segment %>% collect()
 #suming all sales by sector and year
 div <- div %>% group_by(sics1, year) %>% mutate(sector_sales = sum(sales, na.rm = T))
 #remove sectors with zero sales
