@@ -3,5 +3,4 @@ u_gvkey <- unique(df$gvkey)
 first_pull_exec <- tbl(wrds, sql("select * from comp_execucomp.anncomp"))
 first_pull_exec <- first_pull_exec %>% filter(between(year, year_start,year_end))
 first_pull_exec <- first_pull_exec %>% filter(gvkey %in% u_gvkey)
-pull_exec <- first_pull_exec %>% collect()
-
+exec <- first_pull_exec %>% collect()
