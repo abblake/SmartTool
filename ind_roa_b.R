@@ -23,15 +23,17 @@ from compa.funda"))
                   industry_pull <- industry_pull %>% filter(at != 0)
                     #drop observations that equal 0 for net income
                     industry_pull <- industry_pull %>% filter(ni != 0)
-                      #create lag variable for at
-                      industry_pull <- industry_pull %>% arrange(sich, year) %>% mutate(at_l = dplyr::lag(at, 1))
-                      #compute average sic2 roa per year
-                      industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa_b = mean(ni/((at+at_l/2)), na.rm = T)) %>% ungroup()
-                        #drop duplicates
-                        industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa_b, .keep_all = F)
-
-                        #actual data pull
+                      #actual data pull
                         industry_roa_b <- industry_pull %>% collect()
+                      #create lag variable for at
+                        industry_roa_b <- industry_roa_b %>% arrange(sich, year) %>% mutate(at_l = dplyr::lag(at, 1))
+                      #compute average sic2 roa per year
+                        industry_roa_b <- industry_roa_b %>% group_by(sic_2, year) %>% mutate(ind_roa_b = mean(ni/((at+at_l/2)), na.rm = T)) %>% ungroup()
+                        #drop duplicates
+                        industry_roa_b <- industry_roa_b %>% distinct(year,sic_2, ind_roa_b, .keep_all = F)
+
+
+
 
                         df <- merge(df,industry_roa_b, by=c('sic_2', 'year'), all.x=T)
                         rm(industry_roa_b)
