@@ -40,3 +40,4 @@ div_code <- FALSE
                   df <- dbFetch(pulled, n=-1)
                     dbClearResult(pulled)
                     df$year <- df$fyear
+cols_to_remove <- names(df) %>% select(-gvkey,-year,-tic,-sich)
