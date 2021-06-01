@@ -1,6 +1,6 @@
 div_code <- FALSE
   asip_code <- FALSE
-
+`%notin%` <- Negate(`%in%`)
     #need to ask you a few questions
 
     #where do you want the file saved?
