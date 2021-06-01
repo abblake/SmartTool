@@ -19,7 +19,8 @@ segment <- segment %>% filter(!is.na(sales))
 #collect information
 div <- segment %>% collect()
 #add in cols to remove
-cols_to_remove <- c(cols_to_remove, names(div)) %>% select(-gvkey,-year,-tic,-sich)
+cols_to_remove <- c(cols_to_remove, names(div))
+cols_to_remove <- cols_to_remove[cols_to_remove %notin% c('gvkey','fyear','year','tic','sich','cusip','cik','execid')]
 #suming all sales by sector and year
 div <- div %>% group_by(sics1, year) %>% mutate(sector_sales = sum(sales, na.rm = T))
 #remove sectors with zero sales
