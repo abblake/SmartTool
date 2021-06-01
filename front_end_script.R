@@ -41,3 +41,4 @@ div_code <- FALSE
                     dbClearResult(pulled)
                     df$year <- df$fyear
 cols_to_remove <- names(df)[names(df) %notin% c('gvkey','fyear','year','tic','sich','cusip','cik','execid')]
+cols_to_remove <- c(cols_to_remove, 'datadate_x', 'datadate_y')
