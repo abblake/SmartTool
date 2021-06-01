@@ -36,6 +36,8 @@ industry_pull <- industry_pull %>% distinct(year,sic_2, social_a, .keep_all = F)
 
 #actual data pull
 social_asip <- industry_pull %>% collect()
+#cols to remove
+cols_to_remove <- c(cols_to_remove, names(social_asip)) %>% select(-gvkey,-year,-tic,-sich)
 df$year <- df$fyear
 df <- merge(df,social_asip, by=c('sic_2', 'year'), all.x=T)
 df <- df %>% arrange(gvkey,year) %>% mutate(temp_roa = ni/at) %>% mutate(historical_a = dplyr::lag(temp_roa,1)) %>% select(-temp_roa)
