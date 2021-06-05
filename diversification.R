@@ -15,6 +15,8 @@ segment <- tbl(wrds, sql("select *, extract(year from datadate) AS year from com
 segment <- segment %>% filter(!is.na(sics1))
 #remove NA sales variable
 segment <- segment %>% filter(!is.na(sales))
+#filter just what I need
+segment <- segment %>% filter(gvkey %in% f_gvkey)
 #collect information
 div <- segment %>% collect()
 #add in cols to remove
