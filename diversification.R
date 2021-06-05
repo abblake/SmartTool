@@ -10,7 +10,7 @@ date_end <- paste0(year_end,'-12-31')
 #connecting to historical segments
 segment <- tbl(wrds, sql("select *, extract(year from datadate) AS year from comp_segments_hist_daily.wrds_segmerged
                    where stype = 'BUSSEG'
-                   ")))
+                   "))
 #remove NA sectors
 segment <- segment %>% filter(!is.na(sics1))
 #remove NA sales variable
