@@ -9,5 +9,5 @@ Thank you!
 -Andrew, Oleg, Tim, and Aaron
 
 
-**Notes on output**
+**Notes on output:**  
 The script will output two files. One file is a large dataset that includes ALL variables from the WRDS databases accessed. The second file will end with **_small** which includes the variables selected, firm information, and date informatoin.
