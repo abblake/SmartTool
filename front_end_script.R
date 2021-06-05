@@ -1,6 +1,6 @@
 div_code <- FALSE
   asip_code <- FALSE
-`%notin%` <- Negate(`%in%`)
+
     #need to ask you a few questions
 
     #where do you want the file saved?
@@ -18,6 +18,7 @@ div_code <- FALSE
           year_start <- dlg_input(message = "What year should your sample start? (e.g., 2000)")$res %>% as.numeric()
             year_end <- dlg_input(message = "What year should your sample end? (e.g., 2000)")$res %>% as.numeric()
 
+
               ###adapted from https://wrds-www.wharton.upenn.edu/, connects you to WRDS DB
               wrds <- dbConnect(Postgres(),
                                   host='wrds-pgdata.wharton.upenn.edu',
@@ -27,7 +28,24 @@ div_code <- FALSE
                                   user=rstudioapi::askForPassword("Database username"),
                                   password=rstudioapi::askForPassword("Database password"))
 
-                ###connect and pull compustat data based on year
+
+if(!exists('wrds')){
+  print('You did not enter your WRDS credentials accurately. Please try again.')
+}
+              if(!exists('wrds')){
+                wrds <- dbConnect(Postgres(),
+                                  host='wrds-pgdata.wharton.upenn.edu',
+                                  port=9737,
+                                  dbname='wrds',
+                                  sslmode='require',
+                                  user=rstudioapi::askForPassword("Database username"),
+                                  password=rstudioapi::askForPassword("Database password"))
+              }
+              if(!exists('wrds')){
+                print('Your WRDS creentials are still not accurate. Please verify your username and password with WRDS. The script will not work otherwise.')
+              }
+
+            ###connect and pull compustat data based on year
                 pulled <- dbSendQuery(wrds, paste0("select *
                    from compa.funda
                    where fyear between '",year_start,"'","
@@ -40,5 +58,4 @@ div_code <- FALSE
                   df <- dbFetch(pulled, n=-1)
                     dbClearResult(pulled)
                     df$year <- df$fyear
-cols_to_remove <- names(df)[names(df) %notin% c('gvkey','fyear','year','tic','sich','cusip','cik','execid')]
-cols_to_remove <- c(cols_to_remove, 'datadate_x', 'datadate_y')
+
