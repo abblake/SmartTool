@@ -1,9 +1,7 @@
 ###firm_age
 ipodate <- tbl(wrds, sql("select gvkey, ipodate from comp_na_daily_all.company"))
 f_gvkey <- unique(df$gvkey)
-ipodate %>% summarise(N = n())
 ipodate <- ipodate %>% filter(gvkey %in% f_gvkey)
-ipodate %>% summarise(N = n())
 ipo_df <- ipodate %>% collect()
 df <- merge(df, ipo_df, by='gvkey', all.x = T)
 df <- df %>% mutate(ipo_year = year(ipodate))
