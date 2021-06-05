@@ -20,7 +20,8 @@ div_code <- FALSE
 
 
               ###adapted from https://wrds-www.wharton.upenn.edu/, connects you to WRDS DB
-              wrds <- dbConnect(Postgres(),
+            print("Please enter your WRDS credentials.")
+            wrds <- dbConnect(Postgres(),
                                   host='wrds-pgdata.wharton.upenn.edu',
                                   port=9737,
                                   dbname='wrds',
