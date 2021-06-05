@@ -3,10 +3,6 @@
 if (!require('pacman')) install.packages('pacman')
 pacman::p_load(dplyr, RPostgres, lubridate, haven, stringr, svDialogs, janitor)
 
-#converting years for compustat
-date_start <- paste0(year_start,'-01-01')
-date_end <- paste0(year_end,'-12-31')
-
 #connecting to historical segments
 segment <- tbl(wrds, sql("select *, extract(year from datadate) AS year from comp_segments_hist_daily.wrds_segmerged
                    where stype = 'BUSSEG'
