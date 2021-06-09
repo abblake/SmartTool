@@ -59,4 +59,5 @@ if(!exists('wrds')){
                   df <- dbFetch(pulled, n=-1)
                     dbClearResult(pulled)
                     df$year <- df$fyear
+u_gvkey <- unique(df$gvkey)
 
