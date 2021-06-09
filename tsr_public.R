@@ -57,4 +57,3 @@ df <- merge(df, tsr_calc, by = c('gvkey','year'), all.x = T)
 
 rm(tsr_calc,pulled,comp)
 
-#review <- crsp %>% filter(permno==78736, year==1991) %>% filter(date==max(date)) %>% mutate(tsr = ((ret*ret_l1*ret_l2*ret_l3*ret_l4*ret_l5*ret_l6*ret_l7*ret_l8*ret_l9*ret_l10*ret_l11)-1)*100)
