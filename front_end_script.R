@@ -48,7 +48,7 @@ if(!exists('wrds')){
 
             ###connect and pull compustat data based on year
                 pulled <- dbSendQuery(wrds, paste0("select *
-                   from compa.funda
+                   from comp.funda
                    where fyear between '",year_start,"'","
                    and '",year_end,"'
                    and datafmt = 'STD'
