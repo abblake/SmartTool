@@ -26,7 +26,7 @@ div_code <- FALSE
                                   port=9737,
                                   dbname='wrds',
                                   sslmode='require',
-                                  user=rstudioapi::askForPassword("Database username"),
+                                  user=rstudioapi::askForPassword("Database username") %>% tolower(),
                                   password=rstudioapi::askForPassword("Database password"))
 
 
