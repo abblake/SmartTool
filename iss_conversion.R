@@ -109,14 +109,14 @@ iss_legacy <- iss_legacy %>% rename(cusip6 = cusip, coname = name, nom_chair = n
 iss_legacy <- iss_legacy %>% filter(between(year,year_start,year_end))
 iss_legacy <- iss_legacy %>% collect()
 
-#final data adjustments before append/rbind/joining the two datasets together
+#Final data adjustments before append/rbind/joining the two datasets together
 iss_legacy <- type.convert(iss_legacy, na.strings = 'NA', as.is=T)
 iss <- type.convert(iss, na.strings = 'NA', as.is=T)
 iss$female <- grepl('yes', iss$female, ignore.case = T) %>% as.numeric()
 iss$age <- as.numeric(iss$age)
 iss$dirsince <- as.numeric(iss$dirsince)
 
-#append/rbind/joining
+#Append/rbind/joining
 new_iss <- bind_rows(iss_legacy, iss)
 rm(iss,iss_legacy)
 
@@ -284,7 +284,7 @@ if(!exists(ccm_link){
 if(exists(ccm_link){rm(ccm_link)}
 
 
-###add in compustat vars for ownership
+###Add in compustat vars for ownership
 comp_iss <- tbl(wrds, sql("select gvkey, datadate, fyear as year, prcc_f, csho as csho_iss from comp.funda where
                    datafmt = 'STD'
                    and consol = 'C'
@@ -308,21 +308,21 @@ new_iss_m <- new_iss_m %>% mutate(yearcheck=ymd(datadate) - ymd(meetingdate))
 new_iss_m <- new_iss_m %>% filter(!is.na(year))
 new_iss_m <- new_iss_m %>% distinct(cusip6, year, meetingdate, fullname, .keep_all = T)
 
-#boardsize calculations
+#Boardsize calculations -- boardsize variable name
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(boardsize=n())
-#outsiders calculations
+#Outsiders calculations -- outsiders variable name
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(outsiders = sum(classification=="I"))
-#outsider ratio calculations
+#Outsider ratio calculations -- board_independence variable name
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(board_independence = I(outsiders/boardsize*100))
 
-#director ownership calculations
+#Director ownership calculations -- director_ownership_avg variable name
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership = I(num_of_shares*prcc_f/1000))
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership_avg = mean(director_ownership, na.rm=T))
 
-#number of female board members
+#Number of female board members -- countfemale variable name
 new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(countfemale = sum(female, na.rm=T))
 
-#drop down to single year
+#Drop down to single year
 new_iss_m <- new_iss_m %>% distinct(gvkey,year, .keep_all = T)
 new_iss_m_small <- new_iss_m %>% select(gvkey, year, cusip6,cusip9, boardsize, meetingdate, board_independence, director_ownership_avg, countfemale)
 
