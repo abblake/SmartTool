@@ -270,18 +270,18 @@ new_iss_m <- new_iss_m %>% distinct()
 new_iss_m <- new_iss_m %>% rename(coname_crsp = comnam, lpermco = permco, tic = ticker) %>% arrange(lpermco, year)
 
 #Adding GVKEY with CCM Link table.
-#***NOTE** Some users will not have access to this table. In this case, run the commented code directly below this section*****
 u_lpermco <- unique(new_iss_m$lpermco)
 ccm_link <- tbl(wrds, sql('select gvkey, lpermco from crsp.ccmxpf_linktable'))
 ccm_link <- ccm_link %>% filter(!is.na(lpermco)) %>% filter(lpermco %in% u_lpermco)
 ccm_link <- ccm_link %>% collect()
 new_iss_m <- merge(new_iss_m, ccm_link, by='lpermco')
-rm(ccm_link)
 
-###ONLY RUN THIS IF YOU RECEIVE ERRORS IN CCM LINK TABLE.
-#p_load(devtools)
-#devtools::source_url('https://raw.githubusercontent.com/abblake/START/main/gvkey-cusip-link.R')
 
+#If CCM link table is not available, an alternative method will be triggered to link GVKEYS to data.
+if(!exists(ccm_link){
+	p_load(devtools)
+	devtools::source_url('https://raw.githubusercontent.com/abblake/START/main/gvkey-cusip-link.R')}
+if(exists(ccm_link){rm(ccm_link)}
 
 
 ###add in compustat vars for ownership
