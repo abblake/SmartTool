@@ -1,4 +1,6 @@
 #exec pull
+#create function we need to filtering
+`%notin%` <- Negate(`%in%`)
 #create object with unique gkvey
 u_gvkey <- unique(df$gvkey)
 #lazy pull execucomp data
