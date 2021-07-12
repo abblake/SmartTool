@@ -1,10 +1,11 @@
 # Quigley et al. Data Patch for ISS/Risk Metric
 # See for XXX for brief write up
-
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(dplyr, dbplyr, RPostgres, lubridate, haven, stringr, svDialogs, janitor, devtools)
 #Adjusting post 2007 ISS/Risk Metric data
-iss <- tbl(wrds, sql('select * from risk.rmdirectors'))
-iss <- iss %>% filter(between(year,year_start,year_end))
-iss <- iss %>% collect()
+iss_sql <- tbl(wrds, sql('select * from risk.rmdirectors'))
+iss_sql <- iss_sql %>% filter(between(year,year_start,year_end))
+iss <- iss_sql %>% collect()
 iss <- iss %>% select(-priorserv)
 iss <- iss %>% rename(cusip9 = cusip, coname = name,nomine_type = nominee)
 
@@ -36,27 +37,27 @@ iss <- iss %>% mutate_at(yes_nolst, ~ if_else(. == "YES", "1","0") )
 
 #Patching known issues with data
 iss <- iss %>% mutate(cusip9 = case_when(
-coname=="AMERICAN EAGLE OUTFITTERS, INC." ~  "02553E10",
-coname=="AMERISOURCEBERGEN CORP" ~ "03073E105",
-coname=="ARQULE, INC." ~ "04269E107",
-coname=="BRE PROPERTIES, INC." ~ "05564E106",
-coname=="CKE RESTAURANTS, INC." ~ "12561E105",
-coname=="EDWARDS LIFESCIENCES CORPORATION" ~ "28176E108",
-coname=="EMBARQ CORP" ~ "29078E105",
-coname=="INVENTIV HEALTH, INC." ~ "46122E105",
-coname=="J2 GLOBAL COMMUNICATIONS, INC." ~ "46626E106",
-coname=="JAKKS PACIFIC, INC." ~ "47012E106",
-coname=="NCR CORPORATION" ~ "62886E108",
-coname=="NEWS CORPORATION" ~ "65248E104",
-coname=="NSTAR" ~ "67019E107",
-coname=="QUANTA SERVICES, INC." ~ "74762E102",
-coname=="TARGET CORPORATION" ~ "87612E106",
-coname=="THE DUN & BRADSTREET CORP" ~ "26483E100",
-coname=="THE TRAVELERS COMPANIES, INC." ~ "89417E109",
-coname=="VERISIGN, INC." ~ "92343E102",
-coname=="CAPTARIS, INC." ~ "14071N104",
-coname=="SECURE COMPUTING CORP." ~ "813705100",
-TRUE ~ as.character(cusip9)
+  coname=="AMERICAN EAGLE OUTFITTERS, INC." ~  "02553E10",
+  coname=="AMERISOURCEBERGEN CORP" ~ "03073E105",
+  coname=="ARQULE, INC." ~ "04269E107",
+  coname=="BRE PROPERTIES, INC." ~ "05564E106",
+  coname=="CKE RESTAURANTS, INC." ~ "12561E105",
+  coname=="EDWARDS LIFESCIENCES CORPORATION" ~ "28176E108",
+  coname=="EMBARQ CORP" ~ "29078E105",
+  coname=="INVENTIV HEALTH, INC." ~ "46122E105",
+  coname=="J2 GLOBAL COMMUNICATIONS, INC." ~ "46626E106",
+  coname=="JAKKS PACIFIC, INC." ~ "47012E106",
+  coname=="NCR CORPORATION" ~ "62886E108",
+  coname=="NEWS CORPORATION" ~ "65248E104",
+  coname=="NSTAR" ~ "67019E107",
+  coname=="QUANTA SERVICES, INC." ~ "74762E102",
+  coname=="TARGET CORPORATION" ~ "87612E106",
+  coname=="THE DUN & BRADSTREET CORP" ~ "26483E100",
+  coname=="THE TRAVELERS COMPANIES, INC." ~ "89417E109",
+  coname=="VERISIGN, INC." ~ "92343E102",
+  coname=="CAPTARIS, INC." ~ "14071N104",
+  coname=="SECURE COMPUTING CORP." ~ "813705100",
+  TRUE ~ as.character(cusip9)
 ))
 
 iss <- iss %>% mutate(cusip6 = substr(cusip9,1,6))
@@ -117,8 +118,12 @@ iss$age <- as.numeric(iss$age)
 iss$dirsince <- as.numeric(iss$dirsince)
 
 #Append/rbind/joining
+if(nrow(iss) > 0){
 new_iss <- bind_rows(iss_legacy, iss)
-rm(iss,iss_legacy)
+rm(iss,iss_legacy)}else{
+  new_iss <- iss_legacy
+  rm(iss,iss_legacy)
+}
 
 #Patching known issues with data
 new_iss <- new_iss %>% mutate(meetingdate = case_when(
@@ -127,7 +132,7 @@ new_iss <- new_iss %>% mutate(meetingdate = case_when(
   cusip6=="989922" & year==2008 ~ '2008-01-20',
   cusip6=="G98255" & year==2008 ~ '2008-05-25',
   TRUE ~ as.character(meetingdate)
-
+  
 )) %>% mutate(fullname = case_when(
   cusip6=="009158" & year==1997 & is.na(fullname)  ~ "JAMES F. HARDYMON",
   cusip6=="019589" & year==2007 & fullname=="LEON J LEVEL" ~ "DENNIS R. HENDRIX",
@@ -137,9 +142,9 @@ new_iss <- new_iss %>% mutate(meetingdate = case_when(
   cusip6=="691497" & year==2008 & fullname=="J LANIER" & first_name=="J. HICKS" ~ "J. HICKS LANIER"  ,
   cusip6=="691497" & year==2008 & fullname=="J LANIER" & first_name=="J. REESE" ~ "J. REESE LANIER"  ,
   TRUE ~ as.character(fullname)
-
+  
 )) %>% mutate(first_name = case_when(
-
+  
   cusip6=="009158" & year==1997 & fullname=="JAMES F. HARDYMON" ~ "JAMES F." ,
   cusip6=="019589" & year==2007 & fullname=="DENNIS R. HENDRIX" ~ "DENNIS R.",
   cusip6=="233293" & year==2007 & fullname=="ERNIE GREEN" ~ "ERNIE"  ,
@@ -233,7 +238,7 @@ new_iss <- new_iss %>% mutate(meetingdate = case_when(
     year==2009 & fullname=="RON HARBOUR" ~ 52,
     year==2009 & fullname=="JOHN D. WAKELIN" ~ 73,
     TRUE ~ as.numeric(age)
-
+    
   )) %>% mutate(year = case_when(
     cusip6=="00204C" & year==1998 & mtgmonth==1 ~ 1997,
     cusip6=="247357" & year==2000 & mtgmonth==3 ~ 1999,
@@ -247,10 +252,10 @@ new_iss <- new_iss %>% mutate(meetingdate = case_when(
     cusip6=="693262" & year==2000 & coname=='P-COM "1999"' ~ 1999,
     TRUE ~ as.numeric(year)
   )) %>% mutate(outside_public_boards = ifelse(year==2001 & fullname=="SHIRLEY A JACKSON", 4, outside_public_boards)) %>%
-         mutate(pcnt_ctrl_votingpower = ifelse(pcnt_ctrl_votingpower==8190, '.', pcnt_ctrl_votingpower))  %>%
-         mutate(meetingdate = ifelse(year==2007 & fullname=="NANCY H KARP" & ticker=="CATT", '2007-01-30', meetingdate)) %>%
-         mutate(dirsince = ifelse(year==2006 & fullname=="URSULA O FAIRBAIRN" & ticker=="CC", 2005, meetingdate)) %>%
-         mutate(num_of_shares = ifelse(year==2006 & fullname=="URSULA O FAIRBAIRN" & ticker=="CC", 13020, num_of_shares))
+  mutate(pcnt_ctrl_votingpower = ifelse(pcnt_ctrl_votingpower==8190, '.', pcnt_ctrl_votingpower))  %>%
+  mutate(meetingdate = ifelse(year==2007 & fullname=="NANCY H KARP" & ticker=="CATT", '2007-01-30', meetingdate)) %>%
+  mutate(dirsince = ifelse(year==2006 & fullname=="URSULA O FAIRBAIRN" & ticker=="CC", 2005, meetingdate)) %>%
+  mutate(num_of_shares = ifelse(year==2006 & fullname=="URSULA O FAIRBAIRN" & ticker=="CC", 13020, num_of_shares))
 new_iss$meetingdate <- ymd(new_iss$meetingdate)
 
 
@@ -272,61 +277,64 @@ new_iss_m <- new_iss_m %>% rename(coname_crsp = comnam, lpermco = permco, tic = 
 #Adding GVKEY with CCM Link table.
 u_lpermco <- unique(new_iss_m$lpermco)
 ccm_link <- tbl(wrds, sql('select gvkey, lpermco from crsp.ccmxpf_linktable'))
+print('If permission denied, that is ok. We have another way to get what we need')
+if(exists('ccm_link')){
 ccm_link <- ccm_link %>% filter(!is.na(lpermco)) %>% filter(lpermco %in% u_lpermco)
 ccm_link <- ccm_link %>% collect()
-new_iss_m <- merge(new_iss_m, ccm_link, by='lpermco')
+new_iss_m <- merge(new_iss_m, ccm_link, by='lpermco')}
 
 
 #If CCM link table is not available, an alternative method will be triggered to link GVKEYS to data.
-if(!exists(ccm_link){
-	p_load(devtools)
-	devtools::source_url('https://raw.githubusercontent.com/abblake/START/main/gvkey-cusip-link.R')}
-if(exists(ccm_link){rm(ccm_link)}
-
-
-###Add in compustat vars for ownership
-comp_iss <- tbl(wrds, sql("select gvkey, datadate, fyear as year, prcc_f, csho as csho_iss from comp.funda where
+if(!exists('ccm_link')){
+  p_load(devtools)
+  devtools::source_url('https://raw.githubusercontent.com/abblake/START/main/gvkey-cusip-link.R')}
+  if(exists('ccm_link')){rm(ccm_link)}
+     
+     
+     ###Add in compustat vars for ownership
+     comp_iss <- tbl(wrds, sql("select gvkey, datadate, fyear as year, prcc_f, csho as csho_iss from comp.funda where
                    datafmt = 'STD'
                    and consol = 'C'
                    and indfmt = 'INDL'
                    and popsrc = 'D'
 		               and exchg = '11'"))
-u_gvkey_iss <- unique(df$gvkey)
-comp_iss <- comp_iss %>% filter(gvkey %in% u_gvkey_iss)
-comp_iss <- comp_iss %>% filter(between(year, year_start, year_end))
-comp_iss <- comp_iss %>% collect()
-
-#Merge files
-new_iss_m <- merge(new_iss_m, comp_iss, by=c('gvkey','year'), all.x = T)
-
-#Known issue with meeting year, this fixes. See write up for details
-new_iss_m <- new_iss_m %>% mutate(yearcheck=ymd(datadate) - ymd(meetingdate))
-new_iss_m <- new_iss_m %>% mutate(year = ifelse(yearcheck<0, year+1, year))
-new_iss_m <- new_iss_m %>% select(-yearcheck, -datadate, -prcc_f,-csho_iss)
-new_iss_m <- merge(new_iss_m, comp_iss, by=c('gvkey','year'), all=T)
-new_iss_m <- new_iss_m %>% mutate(yearcheck=ymd(datadate) - ymd(meetingdate))
-new_iss_m <- new_iss_m %>% filter(!is.na(year))
-new_iss_m <- new_iss_m %>% distinct(cusip6, year, meetingdate, fullname, .keep_all = T)
-
-#Boardsize calculations -- boardsize variable name
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(boardsize=n())
-#Outsiders calculations -- outsiders variable name
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(outsiders = sum(classification=="I"))
-#Outsider ratio calculations -- board_independence variable name
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(board_independence = I(outsiders/boardsize*100))
-
-#Director ownership calculations -- director_ownership_avg variable name
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership = I(num_of_shares*prcc_f/1000))
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership_avg = mean(director_ownership, na.rm=T))
-
-#Number of female board members -- countfemale variable name
-new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(countfemale = sum(female, na.rm=T))
-
-#Drop down to single year
-new_iss_m <- new_iss_m %>% distinct(gvkey,year, .keep_all = T)
-new_iss_m_small <- new_iss_m %>% select(gvkey, year, cusip6,cusip9, boardsize, meetingdate, board_independence, director_ownership_avg, countfemale)
-
-
-df <- merge(df, new_iss_m_small, by=c('gvkey', 'year'), all.x=T)
-
-rm(new_iss, new_iss_m,new_iss_m_small)
+     u_gvkey_iss <- unique(df$gvkey)
+     comp_iss <- comp_iss %>% filter(gvkey %in% u_gvkey_iss)
+     comp_iss <- comp_iss %>% filter(between(year, year_start, year_end))
+     comp_iss <- comp_iss %>% collect()
+     
+     #Merge files
+     new_iss_m <- merge(new_iss_m, comp_iss, by=c('gvkey','year'), all.x = T)
+     
+     #Known issue with meeting year, this fixes. See write up for details
+     new_iss_m <- new_iss_m %>% mutate(yearcheck=ymd(datadate) - ymd(meetingdate))
+     new_iss_m <- new_iss_m %>% mutate(year = ifelse(yearcheck<0, year+1, year))
+     new_iss_m <- new_iss_m %>% select(-yearcheck, -datadate, -prcc_f,-csho_iss)
+     new_iss_m <- merge(new_iss_m, comp_iss, by=c('gvkey','year'), all=T)
+     new_iss_m <- new_iss_m %>% mutate(yearcheck=ymd(datadate) - ymd(meetingdate))
+     new_iss_m <- new_iss_m %>% filter(!is.na(year))
+     new_iss_m <- new_iss_m %>% distinct(cusip6, year, meetingdate, fullname, .keep_all = T)
+     
+     #Boardsize calculations -- boardsize variable name
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(boardsize=n())
+     #Outsiders calculations -- outsiders variable name
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(outsiders = sum(classification=="I"))
+     #Outsider ratio calculations -- board_independence variable name
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(board_independence = I(outsiders/boardsize*100))
+     
+     #Director ownership calculations -- director_ownership_avg variable name
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership = I(num_of_shares*prcc_f/1000))
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership_avg = mean(director_ownership, na.rm=T))
+     
+     #Number of female board members -- countfemale variable name
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(countfemale = sum(female, na.rm=T))
+     
+     #Drop down to single year
+     new_iss_m <- new_iss_m %>% distinct(gvkey,year, .keep_all = T)
+     new_iss_m_small <- new_iss_m %>% select(gvkey, year, cusip6,ncusip, boardsize, meetingdate, board_independence, director_ownership_avg, countfemale)
+     
+     
+     df <- merge(df, new_iss_m_small, by=c('gvkey', 'year'), all.x=T)
+     
+     rm(new_iss, new_iss_m,new_iss_m_small)
+     
