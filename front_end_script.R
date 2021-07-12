@@ -1,6 +1,6 @@
 div_code <- FALSE
   asip_code <- FALSE
-
+	`%notin%` <- Negate(`%in%`)
     #need to ask you a few questions
 
     #where do you want the file saved?
@@ -60,4 +60,6 @@ if(!exists('wrds')){
                     dbClearResult(pulled)
                     df$year <- df$fyear
 u_gvkey <- unique(df$gvkey)
+cols_to_remove <- names(df)
+cols_to_remove <- cols_to_remove[cols_to_remove %notin% c('gvkey','fyear','year','tic','sich','cusip','cik')]
 
