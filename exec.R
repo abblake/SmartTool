@@ -13,4 +13,4 @@ first_pull_exec <- first_pull_exec %>% filter(gvkey %in% u_gvkey)
 exec <- first_pull_exec %>% collect()
 #for clean up later
 cols_to_remove <- c(cols_to_remove,names(exec))
-cols_to_remove <- cols_to_remove[cols_to_remove %notin% c('gvkey','fyear','year','tic','sich','cusip','cik','execid','ceoann)]
+cols_to_remove <- cols_to_remove[cols_to_remove %notin% c('gvkey','fyear','year','tic','sich','cusip','cik','execid','ceoann')]
