@@ -15,7 +15,7 @@ The script will output two files. One file is a large dataset that includes ALL 
 
 
 ## **DISCLAIMER**  
-While the goal of this project is to standardize the data collection process for management students and scholars, the reality is that these archival datasets and methods for calculating the variables are not perfect. Below we list the known issues we are aware to serve as a disclaimer as well as a call for users and contributors to discuss and recommend possible fixes.
+While the goal of this project is to standardize the data collection process for management students and scholars, the reality is that these archival datasets and methods for calculating some variables are not perfect. Below we list the known issues we are aware to serve as a disclaimer as well as a call for users and contributors to discuss and recommend possible fixes.
 
 1. The CEOANN flag which indicates the executive is the CEO is sometimes blank or inaccurate.
 2. The method for identifying CEO duality can sometimes be inaccurate (about 4%). We are working on a method for flagging these for manual correction.
