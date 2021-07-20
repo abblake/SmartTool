@@ -14,7 +14,7 @@ The tool supports sample selection based on firms on the New York Stock Exchange
 The script will output two files. One file is a large dataset that includes ALL variables from the WRDS databases accessed. The second file will end with **_small** which includes the variables selected, firm information, and date information only.
 
 
-**DISCLAIMER**
+## **DISCLAIMER**  
 While the goal of this project is to standardize the data collection process for management students and scholars, the reality is that these archival datasets and methods for calculating the variables are not perfect. Below we list the known issues we are aware to serve as a disclaimer as well as a call for users and contributors to discuss and recommend possible fixes.
 
 1. The CEOANN flag which indicates the executive is the CEO is sometimes blank or inaccurate.
