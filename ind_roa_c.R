@@ -24,9 +24,9 @@ from compa.funda"))
                     #drop observations that equal 0 for net income
                     industry_pull <- industry_pull %>% filter(ebit != 0)
                       #compute average sic2 roa per year
-                      industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa_c = mean(ebit/at), na.rm = T) %>% ungroup()
+                      industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa3 = mean(ebit/at), na.rm = T) %>% ungroup()
   #drop duplicates
-  industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa_c, .keep_all = F)
+  industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa3, .keep_all = F)
 
     #actual data pull
     industry_roa_c <- industry_pull %>% collect()
