@@ -28,9 +28,9 @@ from compa.funda"))
                       #create lag variable for at
                         industry_roa_b <- industry_roa_b %>% arrange(sich, year) %>% mutate(at_l = dplyr::lag(at, 1))
                       #compute average sic2 roa per year
-                        industry_roa_b <- industry_roa_b %>% group_by(sic_2, year) %>% mutate(ind_roa_b = mean(ni/((at+at_l/2)), na.rm = T)) %>% ungroup()
+                        industry_roa_b <- industry_roa_b %>% group_by(sic_2, year) %>% mutate(ind_roa2 = mean(ni/((at+at_l/2)), na.rm = T)) %>% ungroup()
                         #drop duplicates
-                        industry_roa_b <- industry_roa_b %>% distinct(year,sic_2, ind_roa_b, .keep_all = F)
+                        industry_roa_b <- industry_roa_b %>% distinct(year,sic_2, ind_roa2, .keep_all = F)
 
 
 
