@@ -10,7 +10,7 @@ div_code <- FALSE
     file_name <- dlg_input(message = "Name of file? (without extension)")$res
 
       #what type of file?
-      current_export_list <- c('Stata', 'CSV')
+      current_export_list <- c('Stata', 'CSV', 'SPSS','SAS')
         file_type <- dlg_list(current_export_list, multiple = F)$res
 
 
