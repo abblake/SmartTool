@@ -18,7 +18,7 @@ div_code <- FALSE
           year_start <- dlg_input(message = "What year should your sample start? (e.g., 2000)")$res %>% as.numeric()
             year_end <- dlg_input(message = "What year should your sample end? (e.g., 2000)")$res %>% as.numeric()
 
-
+print('*******Database pull has begun. This will take some time (5-10 minutes), please be patient*******')
               ###adapted from https://wrds-www.wharton.upenn.edu/, connects you to WRDS DB
             print("Please enter your WRDS credentials.")
             wrds <- dbConnect(Postgres(),
@@ -26,8 +26,8 @@ div_code <- FALSE
                                   port=9737,
                                   dbname='wrds',
                                   sslmode='require',
-                                  user=rstudioapi::askForPassword("Database username") %>% tolower(),
-                                  password=rstudioapi::askForPassword("Database password"))
+                                  user=rstudioapi::askForPassword("WRDS Username") %>% tolower(),
+                                  password=rstudioapi::askForPassword("WRDS password"))
 
 
 if(!exists('wrds')){
@@ -39,8 +39,8 @@ if(!exists('wrds')){
                                   port=9737,
                                   dbname='wrds',
                                   sslmode='require',
-                                  user=rstudioapi::askForPassword("Database username")  %>% tolower(),
-                                  password=rstudioapi::askForPassword("Database password"))
+                                  user=rstudioapi::askForPassword("WRDS username")  %>% tolower(),
+                                  password=rstudioapi::askForPassword("WRDS password"))
               }
               if(!exists('wrds')){
                 print('Your WRDS creentials are still not accurate. Please verify your username and password with WRDS. The script will not work otherwise.')
@@ -55,11 +55,15 @@ if(!exists('wrds')){
                    and consol = 'C'
                    and indfmt = 'INDL'
                    and popsrc = 'D'
-		   and exchg = '11' "))
+		   and exchg = '11' 
+		   or exchg = '14' 
+		   or exchg = '15'  "))
                   df <- dbFetch(pulled, n=-1)
                     dbClearResult(pulled)
                     df$year <- df$fyear
+#get vector of unique gvkeys
 u_gvkey <- unique(df$gvkey)
+#this will be used to create the 'small' dataframe at the end of the script
 cols_to_remove <- names(df)
 cols_to_remove <- cols_to_remove[cols_to_remove %notin% c('gvkey','fyear','year','tic','sich','cusip','cik')]
 
