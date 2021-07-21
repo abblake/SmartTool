@@ -62,5 +62,5 @@ tsr_calc <- merge(tsr_calc, comp, by.x = 'cusip', by.y = 'cusip_8', all.x = T)
 tsr_calc <- tsr_calc %>% rename(cusip_9 = cusip.y) %>% rename(cusip_8 = cusip)
 df <- merge(df, tsr_calc, by = c('gvkey','year'), all.x = T)
 
-rm(tsr_calc,pulled,comp)
+rm(tsr_calc,comp)
 
