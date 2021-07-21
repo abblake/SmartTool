@@ -38,6 +38,9 @@ industry_pull <- industry_pull %>% distinct(year,sic_2, social_a, .keep_all = F)
 social_asip <- industry_pull %>% collect()
 df$year <- df$fyear
 df <- merge(df,social_asip, by=c('sic_2', 'year'), all.x=T)
+if(length(df$total_assets) > 0){
+df$at <- df$total_assets
+  ]
 df <- df %>% arrange(gvkey,year) %>% mutate(temp_roa = ni/at) %>% mutate(historical_a = dplyr::lag(temp_roa,1)) %>% select(-temp_roa)
 
 rm(social_asip)
