@@ -18,7 +18,7 @@ div_code <- FALSE
           year_start <- dlg_input(message = "What year should your sample start? (e.g., 2000)")$res %>% as.numeric()
             year_end <- dlg_input(message = "What year should your sample end? (e.g., 2000)")$res %>% as.numeric()
 
-print('*******Database pull has begun. This will take some time (5-10 minutes), please be patient*******')
+print('*******Database pull has begun. This will take some time (5-10 minutes), please be patient.*******')
               ###adapted from https://wrds-www.wharton.upenn.edu/, connects you to WRDS DB
             print("Please enter your WRDS credentials.")
             wrds <- dbConnect(Postgres(),
