@@ -21,3 +21,4 @@ While the goal of this project is to standardize the data collection process for
 2. The method for identifying CEO duality can sometimes be inaccurate (about 4% based on a sample of 2910 manually coded CEO duality variables). We are working on a method for flagging these for manual correction.
 3. Duplicate records are removed using the gvkey and year variables (all databases). 
 4. Sometimes SICH codes are missing from Compustat. We are currently looking into some solutions.
+5. The firm age variable is based on ipodate. Sometimes this causes negative firm_age.
