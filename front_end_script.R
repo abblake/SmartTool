@@ -19,7 +19,7 @@ div_code <- FALSE
             year_end <- dlg_input(message = "What year should your sample end? (e.g., 2000)")$res %>% as.numeric()
 
 		#enter exchanges you would like to pull from
-		exchg_list <- dlg_input(message = "Enter Stock Exchange Codes -- default is NYSE and US NASDAQ", default = "11,14,15",  gui = .GUI)$res
+		#exchg_list <- dlg_input(message = "Enter Stock Exchange Codes -- default is NYSE and US NASDAQ", default = "11,14,15",  gui = .GUI)$res
 		exchg_list <- regmatches(exchg_list, gregexpr("[[:digit:]]+", exchg_list)) 
 		exchg_list <- as.numeric(unlist(exchg_list))
   
@@ -54,7 +54,7 @@ if(!exists('wrds')){
             ###connect and pull compustat data based on year
           	pulled <- tbl(wrds, sql("select * from comp.funda where datafmt = 'STD' and consol = 'C' and indfmt = 'INDL' and popsrc = 'D'"))
 		pulled <- pulled %>% filter(between(fyear, year_start,year_end))
-		pulled <- pulled %>% filter(exchg %in% exchg_list)
+		#pulled <- pulled %>% filter(exchg %in% exchg_list)
 		df <- pulled %>% collect()
 		rm(pulled)
                 df$year <- df$fyear
