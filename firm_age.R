@@ -10,5 +10,5 @@ ipo_df <- ipodate %>% collect()
 #merge
 df <- merge(df, ipo_df, by='gvkey', all.x = T)
 df <- df %>% mutate(ipo_year = year(ipodate))
-df <- df %>% mutate(firm_age = year - ipo_year)
+df <- df %>% mutate(firm_age1 = year - ipo_year)
 rm(ipo_df, ipodate)
