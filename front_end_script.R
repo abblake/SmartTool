@@ -20,8 +20,8 @@ div_code <- FALSE
 
 		#enter exchanges you would like to pull from
 		#exchg_list <- dlg_input(message = "Enter Stock Exchange Codes -- default is NYSE and US NASDAQ", default = "11,14,15",  gui = .GUI)$res
-		exchg_list <- regmatches(exchg_list, gregexpr("[[:digit:]]+", exchg_list)) 
-		exchg_list <- as.numeric(unlist(exchg_list))
+		#exchg_list <- regmatches(exchg_list, gregexpr("[[:digit:]]+", exchg_list)) 
+		#exchg_list <- as.numeric(unlist(exchg_list))
   
 print('*******Database pull has begun. This will take some time (5-10 minutes), please be patient.*******')
               ###adapted from https://wrds-www.wharton.upenn.edu/, connects you to WRDS DB
