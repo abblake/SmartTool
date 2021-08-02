@@ -37,5 +37,5 @@ industry_pull <- industry_pull %>% group_by(gvkey) %>% arrange(year, .by_group =
 industry_pull <- industry_pull %>% group_by(sic_2, year) %>% summarize(ind_roa1 = mean(roa_temp, na.rm=T) %>% ungroup()
 #drop duplicates
 industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa1, .keep_all = F)
-                            df <- merge(df,industry_pull, by=c('sic_2', 'year'), all.x=T)
-                              rm(industry_pull)
+df <- merge(df,industry_pull, by=c('sic_2', 'year'), all.x=T)
+rm(industry_pull)
