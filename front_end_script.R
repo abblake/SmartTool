@@ -4,7 +4,7 @@ div_code <- FALSE
     #need to ask you a few questions
 
     #where do you want the file saved?
-    setwd(choose.dir())
+    setwd(rstudioapi::selectDirectory())
 
     #what do you want the file named?
     file_name <- dlg_input(message = "Name of file? (without extension)")$res
