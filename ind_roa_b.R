@@ -9,7 +9,7 @@ df$sich <- stringr::str_pad(df$sich, 4, 'left', '0')
       sic2 <- sic2[!is.na(sic2)]
 
 #initial lazy pull
-industry_pull <- tbl(wrds, sql("select lpad(sich::text, 4,'0') as SICH, fyear as YEAR, at, ni
+industry_pull <- tbl(wrds, sql("select lpad(sich::text, 4,'0') as SICH, fyear as YEAR, at, ni, gvkey
 from compa.funda"))
 
 #filter year based on what we want
