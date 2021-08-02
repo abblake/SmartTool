@@ -37,7 +37,8 @@ industry_pull <- industry_pull %>% filter(sic_2 %in% sic2)
 industry_pull <- industry_pull %>% group_by(gvkey) %>% mutate(at_l = dplyr::lag(at),1,order_by = fyear) %>% ungroup()
 #compute ROA
 industry_pull <- industry_pull %>% group_by(gvkey, fyear) %>% mutate(roa_temp = ni/(((at+at_l)/2))) %>% ungroup()
-industry_pull <- industry_pull %>% group_by(sic_2, year) %>% summarize(ind_roa2 = mean(roa_temp, na.rm=T)) %>% ungroup()
+industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa2 = mean(roa_temp, na.rm=T)) %>% ungroup()
+industry_pull <- industry_pull %>% select(sic_2,year,ind_roa2)
 #drop duplicates
 industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa2, .keep_all = F)
 df <- merge(df,industry_pull, by=c('sic_2', 'year'), all.x=T)
