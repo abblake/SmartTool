@@ -11,15 +11,18 @@ pacman::p_load(dplyr, RPostgres, lubridate, haven, stringr, svDialogs, janitor, 
 comp <- tbl(wrds, sql("select a.*, b.* from security as a, company as b
                       where a.gvkey = b.gvkey"))
 comp <- comp %>% filter(!is.na(isin))
-comp <- comp %>% filter(exchg==11) #this is important to get
+#comp <- comp %>% filter(exchg==11) #this is no longer needed
 comp <- comp %>% collect()
 #u_gvkey <- head(unique(comp$gvkey), 500)
 comp <- comp %>% filter(gvkey %in% u_gvkey)
 comp <- comp %>% mutate(cusip_8 = substr(comp$cusip,1,8))
 u_cusip <- unique(comp$cusip_8)
 
-#review <- comp[duplicated(comp$gvkey),] ##QA
-#great! now let's pull in crsp
+###checks for duplicates QA
+###review <- comp[duplicated(comp$gvkey),] 
+###ends
+
+#pulls in RET data from CRSP
 crsp <- tbl(wrds, sql('select *, extract(year from date) as year, lag(ret,1) over(partition by cusip order by date) ret_l1,
                       lag(ret,2) over(partition by cusip order by date) ret_l2,
                       lag(ret,3) over(partition by cusip order by date) ret_l3,
@@ -48,7 +51,7 @@ crsp <- crsp %>% distinct(permno, permco, date, ret, .keep_all = T) #drop duplic
 crsp <- crsp %>% mutate_at(vars(matches("ret")), add_one) #add one to TSR
 
 
-#paste0('ret','_',"l",seq(1:11), collapse = "*") get formula
+#this created the mutate formula -- paste0('ret','_',"l",seq(1:11), collapse = "*") get formula
 #calculate tsr
 tsr_calc <- crsp %>% group_by(permno, year) %>% filter(date==max(date)) %>% mutate(tsr1 = ((ret*ret_l1*ret_l2*ret_l3*ret_l4*ret_l5*ret_l6*ret_l7*ret_l8*ret_l9*ret_l10*ret_l11)-1)*100)
 #isolate specific variables.
