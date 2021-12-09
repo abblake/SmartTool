@@ -34,6 +34,7 @@ industry_pull <- industry_pull %>% mutate(sic_2 = substr(sich,1,2))
 industry_pull <- industry_pull %>% filter(sic_2 %in% sic2)
 #compute average sic2 roa per year
 industry_pull <- industry_pull %>% group_by(gvkey) %>% arrange(year, .by_group = T) %>% mutate(roa_temp = ni/at) %>% ungroup()
+industry_pull <- industry_pull %>% group_by(gvkey)  %>% filter(!is.infinite(roa_temp))
 industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa1 = mean(roa_temp, na.rm=T)) %>% ungroup()
 industry_pull <- industry_pull %>% select(sic_2,year,ind_roa1)
 #drop duplicates
