@@ -40,6 +40,6 @@ industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa3 = m
 industry_pull <- industry_pull %>% group_by(gvkey)  %>% filter(!is.infinite(roa_temp))
 industry_pull <- industry_pull %>% select(sic_2,year,ind_roa3)
 #drop duplicates
-industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa3, .keep_all = F)
+industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa3, .keep_all = F)  %>% ungroup()
 df <- merge(df,industry_pull, by=c('sic_2', 'year'), all.x=T)
 rm(industry_pull)
