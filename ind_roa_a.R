@@ -38,6 +38,6 @@ industry_pull <- industry_pull %>% group_by(gvkey)  %>% filter(!is.infinite(roa_
 industry_pull <- industry_pull %>% group_by(sic_2, year) %>% mutate(ind_roa1 = mean(roa_temp, na.rm=T)) %>% ungroup()
 industry_pull <- industry_pull %>% select(sic_2,year,ind_roa1)
 #drop duplicates
-industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa1, .keep_all = F)
+industry_pull <- industry_pull %>% distinct(year,sic_2, ind_roa1, .keep_all = F)  %>% ungroup()
 df <- merge(df,industry_pull, by=c('sic_2', 'year'), all.x=T)
 rm(industry_pull)
