@@ -1,4 +1,4 @@
-comp_gvkeyfix <- tbl(wrds, sql("select a.*, b.* , a.gvkey as gvkey_link from security as a, company as b
+comp_gvkeyfix <- tbl(wrds, sql("select a.*, b.* , a.gvkey as gvkey_link from comp.security as a, comp.company as b
                       where a.gvkey = b.gvkey"))
 comp_gvkeyfix <- comp_gvkeyfix %>% filter(!is.na(isin))
 #comp_gvkeyfix <- comp_gvkeyfix %>% filter(exchg==11)
