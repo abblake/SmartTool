@@ -15,13 +15,13 @@ div <- lazy_pull %>% collect()
   div$year <- year(div$datadate)
   div <- div %>% filter(between(year, year_start,year_end))
   #drop duplicates by the date that is closests to fiscal year
-  div <- div %>% group_by(stype, gvkey, datadate) %>% filter(srcdate==min(srcdate))
+  div <- div %>% group_by(stype, gvkey, datadate) %>% filter(srcdate==min(srcdate)) %>% ungroup()
 #compute diversification
-  div <- div %>% group_by(stype, gvkey, datadate) %>% mutate(total_sales = sum(sales, na.rm = T))
-  div <- div %>% group_by(stype, gvkey, datadate, sid) %>% mutate(p_ia = sales/total_sales)
-  div <- div %>% group_by(stype, gvkey, datadate, sid) %>% mutate(p_ia_formula = p_ia*log(1/p_ia))
+  div <- div %>% group_by(stype, gvkey, datadate) %>% mutate(total_sales = sum(sales, na.rm = T)) %>% ungroup()
+  div <- div %>% group_by(stype, gvkey, datadate, sid) %>% mutate(p_ia = sales/total_sales) %>% ungroup()
+  div <- div %>% group_by(stype, gvkey, datadate, sid) %>% mutate(p_ia_formula = p_ia*log(1/p_ia)) %>% ungroup()
   div <- div %>% group_by(stype, gvkey, datadate) %>% mutate(diversification1 = sum(p_ia_formula, na.rm = T)) %>% ungroup()
-  div <- div %>% select(gvkey, datadate, year, diversification1)
+  div <- div %>% select(gvkey, datadate, year, diversification1) %>% ungroup()
   div <- div %>% distinct(gvkey, datadate, .keep_all = T)
 
 
