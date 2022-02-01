@@ -63,7 +63,7 @@ u_gvkey <- unique(df$gvkey)
 
 #this replaces missing sich codes with SIC codes from company information dataset
 missing_sich <- unique(df$gvkey)
-sich_pull <- tbl(wrds, sql('select * from company'))
+sich_pull <- tbl(wrds, sql('select * from comp.company'))
 sich_pull <- sich_pull %>% filter(gvkey %in% missing_sich)
 sich_pull <- sich_pull %>% collect()
 sich_pull <- sich_pull %>% select(gvkey, sic)
