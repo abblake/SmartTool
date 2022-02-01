@@ -8,7 +8,7 @@ pacman::p_load(dplyr, RPostgres, lubridate, haven, stringr, svDialogs, janitor, 
 #let's do some prep work to make things easy on us after the data is pulled
 
 #first off, we need to link gvkeys to permno.
-comp <- tbl(wrds, sql("select a.*, b.* from security as a, company as b
+comp <- tbl(wrds, sql("select a.*, b.* from comp.security as a, comp.company as b
                       where a.gvkey = b.gvkey"))
 comp <- comp %>% filter(!is.na(isin))
 #comp <- comp %>% filter(exchg==11) #this is no longer needed
