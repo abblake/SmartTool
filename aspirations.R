@@ -23,7 +23,7 @@ industry_pull <- industry_pull %>% filter(between(year, year_start,year_end))
 #replace missing sich with SIC codes
 industry_pull <- industry_pull %>% collect()
 missing_sich <- unique(industry_pull$gvkey)
-sich_pull <- tbl(wrds, sql('select * from company'))
+sich_pull <- tbl(wrds, sql('select * from comp.company'))
 sich_pull <- sich_pull %>% filter(gvkey %in% missing_sich)
 sich_pull <- sich_pull %>% collect()
 sich_pull <- sich_pull %>% select(gvkey, sic)
