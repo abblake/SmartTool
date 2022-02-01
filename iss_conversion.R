@@ -317,18 +317,18 @@ if(!exists('ccm_link')){
      new_iss_m <- new_iss_m %>% distinct(cusip6, year, meetingdate, fullname, .keep_all = T)
 
      #Boardsize calculations -- boardsize variable name
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(boardsize=n())
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(boardsize=n()) %>% ungroup()
      #Outsiders calculations -- outsiders variable name
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(outsiders = sum(classification=="I"))
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(outsiders = sum(classification=="I")) %>% ungroup()
      #Outsider ratio calculations -- board_independence variable name
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(board_independence = I(outsiders/boardsize))
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(board_independence = I(outsiders/boardsize)) %>% ungroup()
 
      #Director ownership calculations -- director_ownership_avg variable name
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership = I(num_of_shares*prcc_f/1000))
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership_avg = mean(director_ownership, na.rm=T))
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership = I(num_of_shares*prcc_f/1000)) %>% ungroup()
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(director_ownership_avg = mean(director_ownership, na.rm=T)) %>% ungroup()
 
      #Number of female board members -- countfemale variable name
-     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(countfemale = sum(female, na.rm=T))
+     new_iss_m <- new_iss_m %>% arrange(cusip6, year, meetingdate, fullname) %>% group_by(cusip6, year, meetingdate) %>% mutate(countfemale = sum(female, na.rm=T)) %>% ungroup()
 
      #Drop down to single year
      new_iss_m <- new_iss_m %>% distinct(gvkey,year, .keep_all = T)
