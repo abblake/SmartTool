@@ -53,7 +53,7 @@ crsp <- crsp %>% mutate_at(vars(matches("ret")), add_one) #add one to TSR
 
 #this created the mutate formula -- paste0('ret','_',"l",seq(1:11), collapse = "*") get formula
 #calculate tsr
-tsr_calc <- crsp %>% group_by(permno, year) %>% filter(date==max(date)) %>% mutate(tsr1 = ((ret*ret_l1*ret_l2*ret_l3*ret_l4*ret_l5*ret_l6*ret_l7*ret_l8*ret_l9*ret_l10*ret_l11)-1)*100)
+tsr_calc <- crsp %>% group_by(permno, year) %>% filter(date==max(date)) %>% mutate(tsr1 = ((ret*ret_l1*ret_l2*ret_l3*ret_l4*ret_l5*ret_l6*ret_l7*ret_l8*ret_l9*ret_l10*ret_l11)-1)*100) %>% ungroup()
 #isolate specific variables.
 tsr_calc <- tsr_calc %>% select(cusip, permno, permco, date, year, tsr1)
 
