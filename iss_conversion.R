@@ -1,5 +1,5 @@
 # Quigley et al. Data Patch for ISS/Risk Metric
-# See for XXX for brief write up
+# Write up comming soon.
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(dplyr, dbplyr, RPostgres, lubridate, haven, stringr, svDialogs, janitor, devtools)
 #Adjusting post 2007 ISS/Risk Metric data
