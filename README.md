@@ -1,4 +1,4 @@
-# SMART Dynamic Strategy Tool ALPHA
+# SMART Dynamic Strategy Tool
 
 **Welcome to SMART Github page!**  
 Our intention in creating this Github page is to enable users to provide feedback about the SMART Tool. This includes but is not limited to additional variables, reporting known database issues, and/or reporting issues with the tool itself. Additionally, this Github page provides the R scripts for everything we use in the implementation  of the tool.   
