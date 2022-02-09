@@ -7,13 +7,13 @@ Our intention in creating this Github page is to enable users to provide feedbac
 Thank you!  
 -Andrew, Oleg, Tim, and Aaron
 
-#### How to cite
+### How to cite
 Comming soon!
 
-#### Contact the Authors/Contribute Code and/or Data To Improve the Tool
+### Contact the Authors/Contribute Code and/or Data To Improve the Tool
 Do you like this tool? Do you have some code or data that can make it better? While the underlying code of this tool is R, we can collaborate to port code from Stata, SAS, etc. into this platform. Please contact our developer [Andrew](mailto:abblake@uark.edu) or create a new post on the "Issues" tab to 
 
-#### Dontate to SMART
+### Dontate to SMART
 To help offset costs with maintaining the SMART tool, we established a donation page through Paypal. Every dollar truly helps, thank you.
 [Click here to donate](https://www.paypal.com/donate/?hosted_button_id=77YGYJJURM2A2)
 
