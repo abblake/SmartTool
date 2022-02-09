@@ -17,7 +17,7 @@ Do you like this tool? Do you have some code or data that can make it better? Wh
 To help offset costs with maintaining the SMART tool, we established a donation page through Paypal. Every dollar truly helps, thank you.
 [Click here to donate](https://www.paypal.com/donate/?hosted_button_id=77YGYJJURM2A2)
 
-**Notes on output:**  
+### Notes on output: 
 The script will output two files. One file is a large dataset that includes ALL variables from the WRDS databases accessed. The second file will end with **_small** which includes the variables selected, firm information, and date information only.
 
 
