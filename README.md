@@ -4,8 +4,6 @@
 Our intention in creating this Github page is to enable users to provide feedback about the SMART Tool. This includes but is not limited to additional variables, reporting known database issues, and/or reporting issues with the tool itself. Additionally, this Github page provides the R scripts for everything we use in the implementation  of the tool.   
 
   
-[Click here to donate](https://www.paypal.com/donate/?hosted_button_id=77YGYJJURM2A2)
-
 Thank you!  
 -Andrew, Oleg, Tim, and Aaron
 
