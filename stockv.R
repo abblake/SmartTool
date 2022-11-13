@@ -20,7 +20,7 @@ u_cusip <- unique(comp$cusip_8)
 
 
 crsp <- tbl(wrds, sql("select * from crsp.dsf"))
-crsp <- crsp %>% filter(cusip %in% u_cusip) %>% mutate(year_var = year(date)) %>% group_by(cusip, year_var) %>% summarise(stockv = sd(ret, na.rm = T)) %>% ungroup
+crsp <- crsp %>% filter(cusip %in% u_cusip) %>% mutate(year_var = year(date)) %>% group_by(cusip, year_var) %>% summarise(stockv = sd(ret, na.rm = T), .groups = 'keep') %>% ungroup
 crsp <- crsp %>% filter(between(year_var,year_start,year_end))
 tsr_calc <- crsp %>% collect
 rm(crsp)
