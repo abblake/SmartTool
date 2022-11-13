@@ -27,9 +27,7 @@ rm(crsp)
 
 #here we are merging linking information so that TSR can be merged to our larger dataframe.
 comp <- comp %>% select(gvkey,cusip,cusip_8)
-tsr_calc <- merge(tsr_calc, comp, by.x = 'cusip', by.y = 'cusip_8', all.x = T)
-tsr_calc <- tsr_calc %>% rename(cusip_9 = cusip.y) %>% rename(cusip_8 = cusip)
+tsr_calc <- merge(tsr_calc, comp, by.x = 'cusip_8', by.y = 'cusip_8', all.x = T)
+tsr_calc <- tsr_calc %>% select(-gvkey.y) %>% rename(gvkey = gvkey.x) %>% rename(year = year_var)
 df <- merge(df, tsr_calc, by = c('gvkey','year'), all.x = T)
-
-rm(tsr_calc,comp)
 
