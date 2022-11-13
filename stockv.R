@@ -1,3 +1,4 @@
+
 #Stock Volatility -- start
 
 if (!require("pacman")) install.packages("pacman")
@@ -23,11 +24,13 @@ crsp <- tbl(wrds, sql("select * from crsp.dsf"))
 crsp <- crsp %>% filter(cusip %in% u_cusip) %>% mutate(year_var = year(date)) %>% group_by(cusip, year_var) %>% summarise(stockv = sd(ret, na.rm = T), .groups = 'keep') %>% ungroup
 crsp <- crsp %>% filter(between(year_var,year_start,year_end))
 tsr_calc <- crsp %>% collect
-rm(crsp)
+
 
 #here we are merging linking information so that TSR can be merged to our larger dataframe.
 comp <- comp %>% select(gvkey,cusip,cusip_8)
-tsr_calc <- merge(tsr_calc, comp, by.x = 'cusip_8', by.y = 'cusip_8', all.x = T)
-tsr_calc <- tsr_calc %>% select(-gvkey.y) %>% rename(gvkey = gvkey.x) %>% rename(year = year_var)
+
+tsr_calc <- merge(tsr_calc, comp, by.x = 'cusip', by.y = 'cusip_8', all.x = T)
+tsr_calc <- tsr_calc %>% rename(cusip_9 = cusip.y) %>% rename(year = year_var)
 df <- merge(df, tsr_calc, by = c('gvkey','year'), all.x = T)
 
+rm(crsp)
