@@ -19,9 +19,9 @@ u_cusip <- unique(comp$cusip_8)
 #Here is the main script used to compute stock market volatility
 crsp <- tbl(wrds, sql("select * from crsp.dsf"))
 crsp <- crsp %>% filter(cusip %in% u_cusip) %>% mutate(year_var = year(date)) %>% group_by(cusip, year_var) %>% summarise(stockv = sd(ret, na.rm = T), .groups = 'keep') %>% ungroup
-crsp <- crsp %>% filter(between(year_var,year_start,year_end))
+crsp <- crsp %>% filter(between(year_var,year_start-1,year_end+1)) #need to lag variables according to SMJ
 tsr_calc <- crsp %>% collect
-
+tsr_calc$year_var <- tsr_calc$year_var +1 #Adding one to the year in order lag variable
 
 #Here we are merging linking information so that stockv can be merged to our larger dataframe.
 comp <- comp %>% select(gvkey,cusip,cusip_8)
